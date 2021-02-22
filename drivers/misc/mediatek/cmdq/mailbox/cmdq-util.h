@@ -26,7 +26,7 @@ enum {
 	} while (0)
 
 #define cmdq_aee(fmt, args...) \
-	pr_notice("[cmdq][aee] "fmt"\n", ##args)
+	pr_debug("[cmdq][aee] "fmt"\n", ##args)
 
 #define cmdq_util_msg(fmt, args...) \
 	do { \
