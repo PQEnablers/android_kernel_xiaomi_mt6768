@@ -988,18 +988,17 @@ endif
 
 # =============PROJECT==================================
 # Add macros by TARGET_PRODUCT for different projects
-ifeq ($(strip $(TARGET_PRODUCT)) , lancelot)
+ifneq (,$(findstring lancelot,$(TARGET_PRODUCT)))
 # Define macros here only for lancelot project
 KBUILD_CFLAGS += -DTARGET_PRODUCT_LANCELOT
-else ifeq ($(strip $(TARGET_PRODUCT)) , shiva)
+else ifneq (,$(findstring shiva,$(TARGET_PRODUCT)))
 # Define macros here only for shiva project
 KBUILD_CFLAGS += -DTARGET_PRODUCT_SHIVA
-else
-endif
-
-ifneq (,$(filter merlin merlinin merlinnfc, $(TARGET_PRODUCT)))
+else ifneq (,$(findstring merlin,$(TARGET_PRODUCT)))
 # Define macros here only for merlin common project
 KBUILD_CFLAGS += -DTARGET_PRODUCT_MERLINCOMMON
+else
+$(error No or invalid product specified)
 endif
 # =============PROJECT==================================
 
