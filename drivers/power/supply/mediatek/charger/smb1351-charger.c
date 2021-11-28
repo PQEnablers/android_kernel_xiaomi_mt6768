@@ -1069,7 +1069,6 @@ static struct irq_handler_info handlers[] = {
 	},
 };
 
-extern void dump_regs(struct smb1351_charger *chip);
 #define RP_22K_CUR_LVL 1500
 #define HVDCP_NOTIFY_MS		5000
 #define SDP_NOTIFY_MS		1000
@@ -1766,45 +1765,6 @@ static int force_irq_set(void *data, u64 val)
 }
 DEFINE_SIMPLE_ATTRIBUTE(force_irq_ops, NULL, force_irq_set, "0x%02llx\n");
 
-void dump_regs(struct smb1351_charger *chip)
-{
-	int rc;
-	u8 reg;
-	u8 addr;
-
-	for (addr = 0; addr <= LAST_CNFG_REG; addr++) {
-		rc = smb1351_read_reg(chip, addr, &reg);
-		if (rc)
-			pr_err("Couldn't read 0x%02x rc = %d\n", addr, rc);
-		else
-			pr_err("0x%02x = 0x%02x\n", addr, reg);
-	}
-
-	for (addr = FIRST_STATUS_REG; addr <= LAST_STATUS_REG; addr++) {
-		rc = smb1351_read_reg(chip, addr, &reg);
-		if (rc)
-			pr_err("Couldn't read 0x%02x rc = %d\n", addr, rc);
-		else
-			pr_err("0x%02x = 0x%02x\n", addr, reg);
-	}
-
-	for (addr = FIRST_CMD_REG; addr <= LAST_CMD_REG; addr++) {
-		rc = smb1351_read_reg(chip, addr, &reg);
-		if (rc)
-			pr_err("Couldn't read 0x%02x rc = %d\n", addr, rc);
-		else
-			pr_err("0x%02x = 0x%02x\n", addr, reg);
-	}
-
-	for (addr = IRQ_A_REG; addr <= IRQ_H_REG; addr++) {
-		rc = smb1351_read_reg(chip, addr, &reg);
-		if (rc)
-			pr_err("Couldn't read 0x%02x rc = %d\n", addr, rc);
-		else
-			pr_err("0x%02x = 0x%02x\n", addr, reg);
-	}
-}
-
 static int smb1351_parse_dt(struct smb1351_charger *chip)
 {
 	struct smb1351_desc *desc = NULL;
@@ -2247,11 +2207,7 @@ static int smb1351_enable_chip(struct charger_device *chg_dev, bool en)
 
 static int smb1351_dump_register(struct charger_device *chg_dev)
 {
-	int ret = 0;
-	struct smb1351_charger *chip = dev_get_drvdata(&chg_dev->dev);
-
-	dump_regs(chip);
-	return ret;
+	return 0;
 }
 
 static int smb1351_get_usbchg_current(struct charger_device *chg_dev, u32 *uA)
@@ -2869,8 +2825,6 @@ out:
 	mutex_unlock(&chip->chgdet_lock);
 	schedule_delayed_work(&chip->check_type_work, msecs_to_jiffies(5000));
 	pr_debug("%s: out.\n", __func__);
-	if (en)
-		dump_regs(chip);
 	return ret;
 }
 
