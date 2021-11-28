@@ -234,7 +234,7 @@ int mtk_chr_is_charger_exist(unsigned char *exist)
 }
 
 /*=============== fix me==================*/
-int chargerlog_level = CHRLOG_ERROR_LEVEL;
+int chargerlog_level = 0;
 
 int chr_get_debug_level(void)
 {
