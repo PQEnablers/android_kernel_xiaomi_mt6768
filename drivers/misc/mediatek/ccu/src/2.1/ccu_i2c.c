@@ -389,21 +389,7 @@ int ccu_i2c_free_dma_buf_mva_all(void)
 
 void ccu_i2c_dump_errr(void)
 {
-	struct i2c_client *pClient = NULL;
-	struct mt_i2c *i2c;
-	int i;
-
-	for (i = CCU_I2C_CHANNEL_MIN ; i < CCU_I2C_CHANNEL_MAX ; i++) {
-		LOG_INF_MUST(
-		"CCU Dump I2C controller[%d] reg ====================\n", i);
-		pClient = get_ccu_i2c_client((enum CCU_I2C_CHANNEL)i);
-		if (pClient != NULL) {
-			i2c = i2c_get_adapdata(pClient->adapter);
-		} else {
-			LOG_INF_MUST(
-				"I2C controller[%d] CCU client is null\n", i);
-		}
-	}
+        pr_debug("ccu_i2c_dump_errr() not implemented!");
 }
 
 /*---------------------------------------------------------------------------*/
