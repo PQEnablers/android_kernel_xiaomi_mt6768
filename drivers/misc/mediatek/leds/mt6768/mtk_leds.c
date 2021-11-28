@@ -142,7 +142,7 @@ static void backlight_debug_log(int level, int mappingLevel)
 	count++;
 
 	if (ret < 0 || ret >= 4096) {
-		pr_info("print log error!");
+		pr_debug("print log error!");
 		count = 5;
 	}
 	if (level == 0 || count >= 5 || (current_t - last_time) > 1000000000) {
@@ -176,7 +176,7 @@ struct cust_mt65xx_led *get_cust_led_dtsi(void)
 	if (pled_dtsi)
 		goto out;
 
-	pr_info("[LED] %s pled_dtsi is null, load dts file\n", __func__);
+	pr_debug("[LED] %s pled_dtsi is null, load dts file\n", __func__);
 	pled_dtsi = kmalloc_array(TYPE_TOTAL,
 			sizeof(struct cust_mt65xx_led), GFP_KERNEL);
 	if (pled_dtsi == NULL) {
@@ -201,7 +201,7 @@ struct cust_mt65xx_led *get_cust_led_dtsi(void)
 			strncat(node_name, leds_name[i],
 			sizeof(node_name) - strlen(node_name) - 1));
 		if (!led_node) {
-			pr_info("[LED]Cannot find LED node from dts\n");
+			pr_debug("[LED]Cannot find LED node from dts\n");
 			pled_dtsi[i].mode = 0;
 			pled_dtsi[i].data = -1;
 			continue;
@@ -253,14 +253,14 @@ struct cust_mt65xx_led *get_cust_led_dtsi(void)
 			   (long)chargepump_set_backlight_level;
 			LEDS_DEBUG("BL set by chargepump\n");
 #elif defined(CONFIG_KTD3136_SUPPORT) && defined(CONFIG_LM3697_SUPPORT)
-			printk("[%s]: *liuyundong*, bkl_id = %d\n", __func__, bkl_id);
+			pr_debug("[%s]: *liuyundong*, bkl_id = %d\n", __func__, bkl_id);
 
 			if (bkl_id == 24) {
 				pled_dtsi[i].data = (long)ktd3137_brightness_set;
-				printk("[%s]: backlight is ktd3136 contrl!\n", __func__);
+				pr_debug("[%s]: backlight is ktd3136 contrl!\n", __func__);
 			} else if (bkl_id == 1) {
 				pled_dtsi[i].data = (long)lm3697_set_brightness;
-				printk("[%s]: backlight is lm3697 contrl!\n", __func__);
+				pr_debug("[%s]: backlight is lm3697 contrl!\n", __func__);
 			}
 #else
 			pled_dtsi[i].data = (long)mtkfb_set_backlight_level;
@@ -847,7 +847,7 @@ int mt_mt65xx_led_set_cust(struct cust_mt65xx_led *cust, int level)
 	case MT65XX_LED_MODE_CUST_LCM:
 		if (strcmp(cust->name, "lcd-backlight") == 0)
 			bl_brightness_hal = level;
-		printk(KERN_INFO "%s backlight control by LCM\n", __func__);
+		pr_debug(KERN_INFO "%s backlight control by LCM\n", __func__);
 		/* warning for this API revork */
 		return ((cust_brightness_set) (cust->data)) (level, bl_div_hal);
 
