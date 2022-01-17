@@ -53,6 +53,8 @@ endif
         export ADAPTOR_OPTS=$(MTK_COMBO_CHIP)
 	export WIFI_IP_SET=1
 	export WIFI_ECO_VER=1
+        export CFG_FM_CHIP_ID=6768
+        export CFG_FM_CHIP=mt6631
 
         # Do build-in for xxx.c checking
         subdir-ccflags-y += -D MTK_WCN_REMOVE_KERNEL_MODULE
@@ -60,14 +62,11 @@ endif
         obj-y += common/
         obj-y += wlan/adaptor/
         obj-y += wlan/core/gen4m/
-
+        obj-y += fmradio/
     endif
 
 # Bluetooth
 obj-$(CONFIG_MTK_COMBO_BT) += bt/mt66xx/legacy/
-
-# FMRadio
-obj-$(CONFIG_MTK_FMRADIO) += fmradio/
 
 # GPS
 obj-$(CONFIG_MTK_COMBO_GPS) += gps/
